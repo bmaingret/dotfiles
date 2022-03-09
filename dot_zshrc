@@ -1,0 +1,66 @@
+# Sign in 1Password, retrieve gpg passphrase and preset passphrase to agent
+function gpg_unlock () {
+        gpg-connect-agent /bye &> /dev/null
+	eval $(op signin my)
+	op get item xeqamyghje7pz52l3rbnovi2di --fields password | /usr/lib/gnupg2/gpg-preset-passphrase --preset 80160C5055DA07978E939C0575A4E8DA0B1ECF27
+}
+gpg_unlock # actually run it
+
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+# Support SSH auth through GPG
+export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+
+export GEM_HOME="$HOME/gems"
+export PATH="$HOME/gems/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
+
+hash -d download=/mnt/c/Users/Baptiste\ Maingret/Downloads
+
+alias ll="exa -la"
+alias vizsh="vi ~/.zshrc"
+
+bindkey "\e[1;5C" forward-word
+bindkey "\e[1;5D" backward-word
+
+source ~/.zplug/init.zsh
+
+HISTFILE=~/.zsh_history
+HISTSIZE=10000
+SAVEHIST=10000
+setopt appendhistory
+
+zplug romkatv/powerlevel10k, as:theme, depth:1
+zplug "zsh-users/zsh-syntax-highlighting"
+zplug "zsh-users/zsh-autosuggestions"
+zplug "plugins/git",   from:oh-my-zsh
+zplug "zsh-users/zsh-autosuggestions"
+zplug "plugins/command-not-found", from:oh-my-zsh
+
+# Install plugins if there are plugins that have not been installed
+if ! zplug check --verbose; then
+    printf "Install? [y/N]: "
+    if read -q; then
+        echo; zplug install
+    fi
+fi
+
+# Then, source plugins and add commands to $PATH
+zplug load
+
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
