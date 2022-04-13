@@ -25,6 +25,7 @@ hash -d ncloud=/mnt/c/Users/Baptiste/Nextcloud
 {{ else if eq .chezmoi.hostname "HOME-BMAINGRET" }}
 hash -d download=/mnt/c/Users/Baptiste\ Maingret/Downloads
 {{ else }}
+echo {{ .chezmoi.hostname }}
 {{ end }}
 
 alias ll="exa -la"
