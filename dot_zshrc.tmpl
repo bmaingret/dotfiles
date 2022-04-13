@@ -6,6 +6,23 @@ function gpg_unlock () {
 }
 gpg_unlock # actually run it
 
+source ~/.zplug/init.zsh
+
+zplug "romkatv/powerlevel10k", as:theme, depth:1
+zplug "zsh-users/zsh-syntax-highlighting"
+zplug "zsh-users/zsh-autosuggestions"
+zplug "plugins/git",   from:oh-my-zsh
+zplug "zsh-users/zsh-autosuggestions"
+zplug "plugins/command-not-found", from:oh-my-zsh
+zplug "agkozak/zsh-z"
+zplug 'zplug/zplug', hook-build:'zplug --self-manage'
+
+
+# Install plugins if there are plugins that have not been installed
+if ! zplug check --verbose; then
+        zplug install
+fi
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -33,27 +50,11 @@ alias chedit="chezmoi edit"
 bindkey "\e[1;5C" forward-word
 bindkey "\e[1;5D" backward-word
 
-source ~/.zplug/init.zsh
-
 HISTFILE=~/.zsh_history
 HISTSIZE=10000
 SAVEHIST=10000
 setopt appendhistory
 
-zplug "romkatv/powerlevel10k", as:theme, depth:1
-zplug "zsh-users/zsh-syntax-highlighting"
-zplug "zsh-users/zsh-autosuggestions"
-zplug "plugins/git",   from:oh-my-zsh
-zplug "zsh-users/zsh-autosuggestions"
-zplug "plugins/command-not-found", from:oh-my-zsh
-zplug "agkozak/zsh-z"
-zplug 'zplug/zplug', hook-build:'zplug --self-manage'
-
-
-# Install plugins if there are plugins that have not been installed
-if ! zplug check --verbose; then
-        zplug install
-fi
 
 # Then, source plugins and add commands to $PATH
 zplug load
