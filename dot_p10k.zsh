@@ -910,7 +910,7 @@
   # without the surrounding parentheses, or to the last path component of CONDA_PREFIX if the former
   # is empty.
   typeset -g POWERLEVEL9K_ANACONDA_CONTENT_EXPANSION='${${${${CONDA_PROMPT_MODIFIER#\(}% }%\)}:-${CONDA_PREFIX:t}}'
-  typeset -g POWERLEVEL9K_ANACONDA_CONTENT_EXPANSION='${P9K_ANACONDA_PYTHON_VERSION}$%{ %}{${${${${CONDA_PROMPT_MODIFIER#\(}% }%\)}:-${CONDA_PREFIX:t}}}'
+  typeset -g POWERLEVEL9K_ANACONDA_CONTENT_EXPANSION='${P9K_ANACONDA_PYTHON_VERSION}$%{ %}${${${${${CONDA_PROMPT_MODIFIER#\(}% }%\)}:-${CONDA_PREFIX:t}}}'
 
 
   # Custom icon.
@@ -923,7 +923,7 @@
 #  typeset -g POWERLEVEL9K_PYENV_SOURCES=(shell local global)
   # If set to false, hide python version if it's the same as global:
   # $(pyenv version-name) == $(pyenv global).
-  typeset -g POWERLEVEL9K_PYENV_PROMPT_ALWAYS_SHOW=false
+  typeset -g POWERLEVEL9K_PYENV_PROMPT_ALWAYS_SHOW=true
   # If set to false, hide python version if it's equal to "system".
   typeset -g POWERLEVEL9K_PYENV_SHOW_SYSTEM=true
 
