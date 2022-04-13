@@ -18,12 +18,12 @@ export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
 
 export GEM_HOME="$HOME/gems"
 export PATH="$HOME/gems/bin:$PATH"
-export PATH="$HOME/.local/bin:$PATH"
+#export PATH="$HOME/.local/bin:$PATH"
 
 hash -d download=/mnt/c/Users/Baptiste\ Maingret/Downloads
 
 alias ll="exa -la"
-alias vizsh="vi ~/.zshrc"
+alias chedit ="chezmoi edit"
 
 bindkey "\e[1;5C" forward-word
 bindkey "\e[1;5D" backward-word
@@ -35,7 +35,7 @@ HISTSIZE=10000
 SAVEHIST=10000
 setopt appendhistory
 
-zplug romkatv/powerlevel10k, as:theme, depth:1
+zplug "romkatv/powerlevel10k", as:theme, depth:1
 zplug "zsh-users/zsh-syntax-highlighting"
 zplug "zsh-users/zsh-autosuggestions"
 zplug "plugins/git",   from:oh-my-zsh
@@ -58,8 +58,6 @@ eval "$(pyenv virtualenv-init -)"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
