@@ -22,7 +22,7 @@ export PATH="$HOME/gems/bin:$PATH"
 
 {{ if eq .chezmoi.hostname "OSE-BMAINGRET" }}
 hash -d ncloud=/mnt/c/Users/Baptiste/Nextcloud
-{{ else }}
+{{ else if .chezmoi.hostname "HOME-BMAINGRET" }}
 hash -d download=/mnt/c/Users/Baptiste\ Maingret/Downloads
 {{ end }}
 
