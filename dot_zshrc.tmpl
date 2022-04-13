@@ -24,6 +24,8 @@ export PATH="$HOME/gems/bin:$PATH"
 hash -d ncloud=/mnt/c/Users/Baptiste/Nextcloud
 {{ else if eq .chezmoi.hostname "HOME-BMAINGRET" }}
 hash -d download=/mnt/c/Users/Baptiste\ Maingret/Downloads
+{{ else }}
+alias test=echo "{{- .chezmoi.hostname }}"
 {{ end }}
 
 alias ll="exa -la"
