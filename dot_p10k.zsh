@@ -910,7 +910,7 @@
   # without the surrounding parentheses, or to the last path component of CONDA_PREFIX if the former
   # is empty.
   typeset -g POWERLEVEL9K_ANACONDA_CONTENT_EXPANSION='${${${${CONDA_PROMPT_MODIFIER#\(}% }%\)}:-${CONDA_PREFIX:t}}'
-  typeset -g POWERLEVEL9K_ANACONDA_CONTENT_EXPANSION='${${${${${CONDA_PROMPT_MODIFIER#\(}% }%\)}:-${CONDA_PREFIX:t}}}${P9K_ANACONDA_PYTHON_VERSION}'
+  typeset -g POWERLEVEL9K_ANACONDA_CONTENT_EXPANSION='${${${${${CONDA_PROMPT_MODIFIER#\(}% }%\)}:-${CONDA_PREFIX:t}}}%{ %}${P9K_ANACONDA_PYTHON_VERSION}'
 
 
   # Custom icon.
