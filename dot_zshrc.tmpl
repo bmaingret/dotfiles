@@ -1,11 +1,3 @@
-# Sign in 1Password, retrieve gpg passphrase and preset passphrase to agent
-function gpg_unlock () {
-        gpg-connect-agent /bye &> /dev/null
-	eval $(op signin my)
-	op get item xeqamyghje7pz52l3rbnovi2di --fields password | /usr/lib/gnupg2/gpg-preset-passphrase --preset 80160C5055DA07978E939C0575A4E8DA0B1ECF27
-}
-gpg_unlock # actually run it
-
 source ~/.zplug/init.zsh
 
 zplug "romkatv/powerlevel10k", as:theme, depth:1
@@ -65,6 +57,21 @@ setopt appendhistory
 
 # Then, source plugins and add commands to $PATH
 zplug load
+
+# Configure ssh forwarding
+export SSH_AUTH_SOCK=$HOME/.ssh/agent.sock
+# need `ps -ww` to get non-truncated command for matching
+# use square brackets to generate a regex match for the process we want but that doesn't match the grep command running it!
+ALREADY_RUNNING=$(ps -auxww | grep -q "[n]piperelay.exe -ei -s //./pipe/openssh-ssh-agent"; echo $?)
+if [[ $ALREADY_RUNNING != "0" ]]; then
+    if [[ -S $SSH_AUTH_SOCK ]]; then
+        # not expecting the socket to exist as the forwarding command isn't running (http://www.tldp.org/LDP/abs/html/fto.html)
+        rm $SSH_AUTH_SOCK
+    fi
+    # setsid to force new session to keep running
+    # set socat to listen on $SSH_AUTH_SOCK and forward to npiperelay which then forwards to openssh-ssh-agent on windows
+    (setsid socat UNIX-LISTEN:$SSH_AUTH_SOCK,fork EXEC:"npiperelay.exe -ei -s //./pipe/openssh-ssh-agent",nofork &) >/dev/null 2>&1
+fi
 
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
