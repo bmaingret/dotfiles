@@ -23,8 +23,6 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# Support SSH auth through GPG
-export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
 
 export GEM_HOME="$HOME/gems"
 export PATH="$HOME/gems/bin:$PATH"
@@ -77,6 +75,9 @@ if [[ $ALREADY_RUNNING != "0" ]]; then
     fi
     (setsid socat UNIX-LISTEN:$OP_SOCK,fork EXEC:"npiperelay.exe -ei -s //./pipe/1Password-1-1Password-BrowserSupport",nofork &) >/dev/null 2>&1
 fi
+
+export OP_PLUGIN_ALIASES_SOURCED=1
+alias glab="op plugin run -- glab"
 
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
