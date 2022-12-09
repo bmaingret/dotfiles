@@ -58,22 +58,23 @@ setopt appendhistory
 # Then, source plugins and add commands to $PATH
 zplug load
 
-# Configure ssh forwarding
+# Configure ssh forwarding and 1password cli
 export SSH_AUTH_SOCK=$HOME/.ssh/agent.sock
 export OP_SOCK=/run/user/$UID/1Password-BrowserSupport.sock
-# need `ps -ww` to get non-truncated command for matching
-# use square brackets to generate a regex match for the process we want but that doesn't match the grep command running it!
+
 ALREADY_RUNNING=$(ps -auxww | grep -q "[n]piperelay.exe -ei -s //./pipe/openssh-ssh-agent"; echo $?)
 if [[ $ALREADY_RUNNING != "0" ]]; then
     if [[ -S $SSH_AUTH_SOCK ]]; then
-        # not expecting the socket to exist as the forwarding command isn't running (http://www.tldp.org/LDP/abs/html/fto.html)
         rm $SSH_AUTH_SOCK
+    fi
+    (setsid socat UNIX-LISTEN:$SSH_AUTH_SOCK,fork EXEC:"npiperelay.exe -ei -s //./pipe/openssh-ssh-agent",nofork &) >/dev/null 2>&1
+fi
+
+ALREADY_RUNNING=$(ps -auxww | grep -q "[n]piperelay.exe -ei -s //./pipe/1Password-1-1Password-BrowserSupport"; echo $?)
+if [[ $ALREADY_RUNNING != "0" ]]; then
+    if [[ -S $OP_SOCK ]]; then
         rm $OP_SOCK
     fi
-    # setsid to force new session to keep running
-    # set socat to listen on $SSH_AUTH_SOCK and forward to npiperelay which then forwards to openssh-ssh-agent on windows
-    (setsid socat UNIX-LISTEN:$SSH_AUTH_SOCK,fork EXEC:"npiperelay.exe -ei -s //./pipe/openssh-ssh-agent",nofork &) >/dev/null 2>&1
-
     (setsid socat UNIX-LISTEN:$OP_SOCK,fork EXEC:"npiperelay.exe -ei -s //./pipe/1Password-1-1Password-BrowserSupport",nofork &) >/dev/null 2>&1
 fi
 
